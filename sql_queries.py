@@ -1,27 +1,58 @@
 # DROP TABLES
 
-songplay_table_drop = ""
-user_table_drop = ""
-song_table_drop = ""
-artist_table_drop = ""
-time_table_drop = ""
+songplay_table_drop = "DROP TABLE IF EXISTS songplays"
+user_table_drop = "DROP TABLE IF EXISTS user_table"
+song_table_drop = "DROP TABLE IF EXISTS song_table"
+artist_table_drop = "DROP TABLE IF EXISTS artist_table"
+time_table_drop = "DROP TABLE IF EXISTS time_table"
 
 # CREATE TABLES
 
-songplay_table_create = ("""
-""")
+songplay_table_create = ("""CREATE TABLE IF NOT EXISTS songplays(
+    songplay_id SERIAL CONSTRAINT songplay_pk PRIMARY KEY,
+    start_time TIMESTAMP REFERENCES time (start_time),
+    user_id INT REFERENCES users (user_id),
+    level VARCHAR NOT NULL,
+    song_id VARCHAR REFERENCES songs (song_id),
+    artist_id VARCHAR REFERENCES artists (artist_id),
+    session_id INT NOT NULL, 
+    location VARCHAR,
+    user_agent TEXT
+)""")
 
-user_table_create = ("""
-""")
+user_table_create = ("""CREATE TABLE IF NOT EXISTS  user_table(
+    user_id  INT CONSTRAINT users_pk PRIMARY KEY,
+    first_name  VARCHAR,
+    last_name  VARCHAR,
+    gender  CHAR(1),
+    level VARCHAR NOT NULL
+)""")
 
-song_table_create = ("""
-""")
+song_table_create = ("""CREATE TABLE  IF NOT EXISTS song_table(
+    song_id VARCHAR CONSTRAINT songs_pk PRIMARY KEY,
+    title  VARCHAR,
+    artist_id  VARCHAR REFERENCES artists (artist_id),
+    year INT CHECK (year >= 0),
+    duration FLOAT
+)""")
 
-artist_table_create = ("""
-""")
+artist_table_create = ("""CREATE TABLE  IF NOT EXISTS artist_table(
+    artist_id VARCHAR CONSTRAINT artist_pk PRIMARY KEY,
+    name VARCHAR,
+    location VARCHAR,
+    latitude DECIMAL(9,6),
+    longitude DECIMAL(9,6)
+)""")
 
-time_table_create = ("""
-""")
+time_table_create = ("""CREATE TABLE IF NOT EXISTS  time_table(
+    start_time  TIMESTAMP CONSTRAINT time_pk PRIMARY KEY,
+    hour INT NOT NULL CHECK (hour >= 0),
+    day INT NOT NULL CHECK (day >= 0),
+    week INT NOT NULL CHECK (week >= 0),
+    month INT NOT NULL CHECK (month >= 0),
+    year INT NOT NULL CHECK (year >= 0),
+    weekday VARCHAR NOT NULL
+)""")
 
 # INSERT RECORDS
 
@@ -49,4 +80,4 @@ song_select = ("""
 # QUERY LISTS
 
 create_table_queries = [songplay_table_create, user_table_create, song_table_create, artist_table_create, time_table_create]
-drop_table_queries = [songplay_table_drop, user_table_drop, song_table_drop, artist_table_drop, time_table_drop]
+drop_table_queries =[songplay_table_drop, user_table_drop, song_table_drop, artist_table_drop, time_table_drop]
